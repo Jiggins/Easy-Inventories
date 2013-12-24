@@ -3,18 +3,61 @@ package easyinventories.blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityBlockSorting extends TileEntity implements ISidedInventory {
 
 	private ItemStack [] contents;
+	private int [] mainStorage;
 
 	public TileEntityBlockSorting() {
 		contents = new ItemStack [36];
+		mainStorage = new int [36];
+
+		for (int i = 0; i < mainStorage.length; i++) {
+			mainStorage[i] = i;
+		}
 	}
 
 	public ItemStack [] getContents() {
 		return contents;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTag) {
+		System.out.println("Writing Sorting Block to NBT");
+
+		super.writeToNBT(nbtTag);
+		NBTTagList tagList = new NBTTagList();
+
+		for (int i = 0; i < contents.length; i ++) {
+			if (this.contents[i] != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("Slot", (byte)i);
+				this.contents[i].writeToNBT(tag);
+				tagList.appendTag(tag);
+			}
+		}
+
+		nbtTag.setTag("Sorting", tagList);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		System.out.println("Reading Sorting Block from NBT");
+		super.readFromNBT(tag);
+		NBTTagList tagList = tag.getTagList("Sorting");
+		this.contents = new ItemStack[this.getSizeInventory()];
+
+		for (int i = 0; i < tagList.tagCount(); i++) {
+			NBTTagCompound slotTag = (NBTTagCompound) tagList.tagAt(i);
+			int slot = slotTag.getByte("Slot") & 255;
+			if (slot >= 0 && slot < this.contents.length) {
+				this.contents[slot] = ItemStack.loadItemStackFromNBT(slotTag);
+			}
+		}
 	}
 
 	//ISidedInventory Methods
@@ -110,7 +153,7 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		return new int [] {0,1,2,3,4,5};
+		return mainStorage;
 	}
 
 	@Override

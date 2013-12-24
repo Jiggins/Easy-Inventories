@@ -11,4 +11,7 @@ public class ModInformation {
 	public static final String 	BLOCKSORTING_KEY = "BlockSorting";
 	public static final int 	DEFAULT_BLOCK_ID = 1024;
 	public static 		int 	SORTING_ID = 1024;
+
+	// Tile Entities
+	static public final String SORTING_TE = "sortingBlockTileEntity";
 }

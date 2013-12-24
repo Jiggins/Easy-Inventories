@@ -11,6 +11,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import easyinventories.blocks.BlockSorting;
+import easyinventories.blocks.TileEntityBlockSorting;
 import easyinventories.config.ConfigHandler;
 import easyinventories.network.PacketHandler;
 import easyinventories.proxies.CommonProxy;
@@ -31,13 +32,20 @@ public class ModEasyInventories {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
+		registerBlocks();
+	}
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		LanguageRegistry.addName(sorting, "Sorting Block");
+		registerTileEntities();
+	}
+
+	public static void registerBlocks() {
 		sorting = new BlockSorting(ModInformation.SORTING_ID);
 		GameRegistry.registerBlock(sorting, ModInformation.BLOCKSORTING_KEY);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		LanguageRegistry.addName(sorting, "Sorting Block");
-
+	public static void registerTileEntities() {
+		GameRegistry.registerTileEntity(TileEntityBlockSorting.class, ModInformation.SORTING_TE);
 	}
 }
