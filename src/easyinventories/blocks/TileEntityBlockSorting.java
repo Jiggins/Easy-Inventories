@@ -88,10 +88,10 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 		itemStack = this.contents[i].splitStack(j);
 
-		if (this.contents[i].stackSize == 0) this.contents[i] = null;
+		if (this.contents[i].stackSize == 0) {
+			this.contents[i] = null;
+		}
 
-
-		
 		return itemStack;
 	}
 

@@ -16,7 +16,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import easyinventories.ModInformation;
+import easyinventories.ModInfo;
 
 public class BlockSorting extends BlockContainer {
 
@@ -144,7 +144,7 @@ public class BlockSorting extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		blockIcon = register.registerIcon("easyinventories" + ":" + ModInformation.BLOCKSORTINGTEXTURE);
+		blockIcon = register.registerIcon("easyinventories" + ":" + ModInfo.BLOCKSORTINGTEXTURE);
 	}
 
     

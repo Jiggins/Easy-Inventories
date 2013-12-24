@@ -2,7 +2,7 @@ package easyinventories.config;
 
 import java.io.File;
 
-import easyinventories.ModInformation;
+import easyinventories.ModInfo;
 import net.minecraftforge.common.Configuration;
 
 public class ConfigHandler {
@@ -15,8 +15,8 @@ public class ConfigHandler {
 		config.load();
 
 		//Blocks
-		ModInformation.SORTING_ID = config.getBlock(ModInformation.BLOCKSORTING_KEY, ModInformation.DEFAULT_BLOCK_ID).getInt();
-		nextId = ModInformation.SORTING_ID;
+		ModInfo.SORTING_ID = config.getBlock(ModInfo.BLOCKSORTING_KEY, ModInfo.DEFAULT_BLOCK_ID).getInt();
+		nextId = ModInfo.SORTING_ID;
 		config.save();
 	}
 

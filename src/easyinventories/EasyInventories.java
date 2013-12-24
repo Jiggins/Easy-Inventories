@@ -18,13 +18,13 @@ import easyinventories.proxies.CommonProxy;
 
 
 @Mod(modid = "EasyInventories", name = "Easy Inventories")
-@NetworkMod(channels = {ModInformation.CHANNELS}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
-public class ModEasyInventories {
+@NetworkMod(channels = {ModInfo.CHANNELS}, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketHandler.class)
+public class EasyInventories {
 
 	public static Block sorting;
 	
-	@Instance(ModInformation.ID)
-	public static ModEasyInventories easyInventories;
+	@Instance(ModInfo.ID)
+	public static EasyInventories easyInventories;
 
 	@SidedProxy(clientSide = "easyinventories.proxies.ClientProxy", serverSide = "easyinventories.proxies.CommonProxy")
 	public static CommonProxy proxy;
@@ -41,11 +41,11 @@ public class ModEasyInventories {
 	}
 
 	public static void registerBlocks() {
-		sorting = new BlockSorting(ModInformation.SORTING_ID);
-		GameRegistry.registerBlock(sorting, ModInformation.BLOCKSORTING_KEY);
+		sorting = new BlockSorting(ModInfo.SORTING_ID);
+		GameRegistry.registerBlock(sorting, ModInfo.BLOCKSORTING_KEY);
 	}
 
 	public static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityBlockSorting.class, ModInformation.SORTING_TE);
+		GameRegistry.registerTileEntity(TileEntityBlockSorting.class, ModInfo.SORTING_TE);
 	}
 }
