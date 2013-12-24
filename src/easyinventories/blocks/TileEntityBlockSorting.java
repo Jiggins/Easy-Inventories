@@ -67,12 +67,10 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		return 36;
 	}
 
-
 	@Override
 	public ItemStack getStackInSlot(int i) {
 		return contents[i];
 	}
-
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
@@ -95,12 +93,10 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		return itemStack;
 	}
 
-
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
 		return this.contents[i];
 	}
-
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
@@ -124,7 +120,6 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		return 64;
 	}
 
-
 	@Override
 	public void onInventoryChanged() {
 		// TODO Auto-generated method stub
@@ -137,14 +132,11 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		return true;
 	}
 
-
 	@Override
 	public void openChest() {}
 
-
 	@Override
 	public void closeChest() {}
-
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
