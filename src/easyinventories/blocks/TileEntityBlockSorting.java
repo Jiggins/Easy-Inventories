@@ -20,11 +20,14 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 			mainStorage[i] = i;
 		}
 	}
-
+	
 	public ItemStack [] getContents() {
 		return contents;
 	}
-
+	
+	/**
+	 * Writes contents of its inventory to NBT Data
+	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTag) {
 		System.out.println("Writing Sorting Block to NBT");
@@ -79,9 +82,8 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		ItemStack itemStack;
 
 		if (this.contents[i].stackSize <= j) {
-			itemStack = this.contents[i];
-			this.contents[i] = null;
-			return itemStack;
+			setInventorySlotContents(i, null);
+			return null;
 		}
 
 		itemStack = this.contents[i].splitStack(j);
@@ -90,6 +92,7 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 			this.contents[i] = null;
 		}
 
+		onInventoryChanged();
 		return itemStack;
 	}
 
@@ -101,6 +104,12 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		this.contents[i] = itemstack;
+
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
+			itemstack.stackSize = getInventoryStackLimit();
+		}
+
+		onInventoryChanged();
 		
 	}
 
@@ -111,8 +120,7 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Create gui first.
-		return false;
+		return true;
 	}
 
 	@Override
@@ -124,12 +132,11 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 	public void onInventoryChanged() {
 		// TODO Auto-generated method stub
 		// I have no idea what this is meant to do
-		
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
+		return entityplayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
 	}
 
 	@Override

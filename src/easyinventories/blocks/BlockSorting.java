@@ -14,8 +14,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import easyinventories.EasyInventories;
 import easyinventories.ModInfo;
 
 public class BlockSorting extends BlockContainer {
@@ -40,24 +42,26 @@ public class BlockSorting extends BlockContainer {
 	}
 
 	@Override
-		public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-			if (!world.isRemote) {
-				IInventory inventory = getInventory(world, x, y, z);
-				ItemStack item;
-				
-				player.addChatMessage("\nInventory: ");
-				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					item = inventory.getStackInSlot(i);
-					if (item != null) {
-						player.addChatMessage(i + ": " + item.stackSize + " x " + item.getDisplayName());
-					}
-	//				else {
-	//					player.addChatMessage(i + ": ");
-	//				}
-				}	
-			}
-			return true;
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) {
+			
+			FMLNetworkHandler.openGui(player, EasyInventories.easyInventories, 0, world, x, y, z);
+			IInventory inventory = getInventory(world, x, y, z);
+			ItemStack item;
+			
+			player.addChatMessage("\nInventory: ");
+			for (int i = 0; i < inventory.getSizeInventory(); i++) {
+				item = inventory.getStackInSlot(i);
+				if (item != null) {
+					player.addChatMessage(i + ": " + item.stackSize + " x " + item.getDisplayName());
+				}
+//				else {
+//					player.addChatMessage(i + ": ");
+//				}
+			}	
 		}
+		return true;
+	}
 
 	/**
 	 * Gets the inventory of the chest at the specified coords, accounting for blocks or ocelots on top of the chest,
