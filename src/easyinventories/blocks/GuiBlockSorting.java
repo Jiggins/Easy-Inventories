@@ -13,13 +13,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiBlockSorting extends GuiContainer {
 
-	static public final ResourceLocation texture = new ResourceLocation("easyinventories", "textures/gui/coderDojoIconSides.png");
+	static public final ResourceLocation texture = new ResourceLocation("easyinventories", "textures/gui/SortingGui.png");
 
 	public GuiBlockSorting(InventoryPlayer invPlayer, TileEntityBlockSorting sorting) {
 		super(new ContainerBlockSorting(invPlayer, sorting));
 		
-		xSize = 64;
-		ySize = 64;
+		xSize = 176;
+		ySize = 184;
 	}
 
 	@Override

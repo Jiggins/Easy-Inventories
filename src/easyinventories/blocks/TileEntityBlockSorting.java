@@ -67,7 +67,7 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 	@Override
 	public int getSizeInventory() {
-		return 36;
+		return contents.length;
 	}
 
 	@Override
@@ -76,29 +76,27 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		if (contents[i] == null) return null;
-
-		ItemStack itemStack;
-
-		if (this.contents[i].stackSize <= j) {
+	public ItemStack decrStackSize(int i, int count) {
+		ItemStack itemstack = getStackInSlot(i);
+		
+		if (contents[i] == null) return itemstack;
+		
+		if (itemstack.stackSize <= count) {
 			setInventorySlotContents(i, null);
-			return null;
 		}
-
-		itemStack = this.contents[i].splitStack(j);
-
-		if (this.contents[i].stackSize == 0) {
-			this.contents[i] = null;
+		else {
+			itemstack.splitStack(count);
+			onInventoryChanged();
 		}
-
-		onInventoryChanged();
-		return itemStack;
+	
+		return itemstack;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		return this.contents[i];
+		ItemStack itemstack = getStackInSlot(i);
+		setInventorySlotContents(i, null);
+		return itemstack;
 	}
 
 	@Override
@@ -130,8 +128,7 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 	@Override
 	public void onInventoryChanged() {
-		// TODO Auto-generated method stub
-		// I have no idea what this is meant to do
+		// TODO Change items rendered on block
 	}
 
 	@Override

@@ -44,7 +44,6 @@ public class BlockSorting extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			
 			FMLNetworkHandler.openGui(player, EasyInventories.easyInventories, 0, world, x, y, z);
 			IInventory inventory = getInventory(world, x, y, z);
 			ItemStack item;
@@ -82,16 +81,18 @@ public class BlockSorting extends BlockContainer {
      */
     public void breakBlock(World world, int x, int y, int z, int oldBlockID, int oldMetaData) {
     	if (!world.isRemote) {
-    		IInventory inventory = getInventory(world, x, y, z);
-    		dropContents(inventory, world, x, y, z);
-    		
+    		TileEntity te = new TileEntityBlockSorting();
+    		if (te != null && te instanceof IInventory) {
+    			IInventory inventory = getInventory(world, x, y, z);
+    			dropContents(inventory, world, x, y, z);
+    		}
     	}
     }
 
     public void dropContents(IInventory inventory, World world, int x, int y, int z) {
     	ItemStack item;
     	for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			item = inventory.getStackInSlot(i);
+			item = inventory.getStackInSlotOnClosing(i);
 	    
 	    	if (item != null) {
 	            float f = this.random.nextFloat() * 0.8F + 0.1F;
@@ -107,17 +108,17 @@ public class BlockSorting extends BlockContainer {
 
 	                item.stackSize -= k1;
 	                
-					EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(item.itemID, k1, item.getItemDamage()));
+					EntityItem droppedItem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(item.itemID, k1, item.getItemDamage()));
 
 	                if (item.hasTagCompound()) {
-	                    entityitem.getEntityItem().setTagCompound((NBTTagCompound)item.getTagCompound().copy());
+	                    droppedItem.getEntityItem().setTagCompound((NBTTagCompound)item.getTagCompound().copy());
 	                }
 
 	                float f3 = 0.05F;
-	                entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
-	                entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
-	                entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
-	                world.spawnEntityInWorld(entityitem);
+	                droppedItem.motionX = (double)((float)this.random.nextGaussian() * f3);
+	                droppedItem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
+	                droppedItem.motionZ = (double)((float)this.random.nextGaussian() * f3);
+	                world.spawnEntityInWorld(droppedItem);
 	            }
 	        }
 		}
