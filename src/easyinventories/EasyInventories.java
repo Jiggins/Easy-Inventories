@@ -11,9 +11,9 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import easyinventories.blocks.BlockSorting;
-import easyinventories.blocks.GuiHandler;
 import easyinventories.blocks.TileEntityBlockSorting;
 import easyinventories.config.ConfigHandler;
+import easyinventories.gui.GuiHandler;
 import easyinventories.network.PacketHandler;
 import easyinventories.proxies.CommonProxy;
 

@@ -1,4 +1,4 @@
-package easyinventories.blocks;
+package easyinventories.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -6,6 +6,8 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import easyinventories.EasyInventories;
+import easyinventories.blocks.ContainerBlockSorting;
+import easyinventories.blocks.TileEntityBlockSorting;
 
 public class GuiHandler implements IGuiHandler {
 

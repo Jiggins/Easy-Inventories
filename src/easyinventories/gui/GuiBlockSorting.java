@@ -1,4 +1,4 @@
-package easyinventories.blocks;
+package easyinventories.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import easyinventories.blocks.ContainerBlockSorting;
+import easyinventories.blocks.TileEntityBlockSorting;
 
 @SideOnly(Side.CLIENT)
 public class GuiBlockSorting extends GuiContainer {

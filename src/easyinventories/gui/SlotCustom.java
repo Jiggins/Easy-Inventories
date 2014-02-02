@@ -1,4 +1,4 @@
-package easyinventories.blocks;
+package easyinventories.gui;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
