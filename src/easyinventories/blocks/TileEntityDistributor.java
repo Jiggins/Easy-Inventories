@@ -1,3 +1,4 @@
+
 package easyinventories.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,79 +9,99 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import easyinventories.ModInfo;
 
-public class TileEntityBlockSorting extends TileEntity implements ISidedInventory {
+public class TileEntityDistributor extends TileEntity implements ISidedInventory {
+	
+	public ItemStack [] input;
+	public ItemStack [] output;
+	public int [] inputSlots;
+	public int [] outputSlots;
 
-	private ItemStack [] contents;
-	private int [] mainStorage;
+	public TileEntityDistributor() {
+		System.out.println("\n\n\n\n\n\nCreating Tile Entity\n\n\n\n\n\n");
+		input = new ItemStack[18];
+		output = new ItemStack[18];
+		inputSlots = new int[18];
+		outputSlots = new int[18];
 
-	public TileEntityBlockSorting() {
-		contents = new ItemStack [36];
-		mainStorage = new int [36];
-
-		for (int i = 0; i < mainStorage.length; i++) {
-			mainStorage[i] = i;
+		for (int i = 0; i < 18; i++) {
+			inputSlots[i] = i;
+			outputSlots[i] = i + 18;
 		}
 	}
-	
-	public ItemStack [] getContents() {
-		return contents;
-	}
-	
+
 	/**
 	 * Writes contents of its inventory to NBT Data
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTag) {
-		System.out.println("Writing Sorting Block to NBT");
-
 		super.writeToNBT(nbtTag);
 		NBTTagList tagList = new NBTTagList();
 
-		for (int i = 0; i < contents.length; i ++) {
-			if (this.contents[i] != null) {
+		for (int i = 0; i < input.length; i ++) {
+			if (this.input[i] != null) {
 				NBTTagCompound tag = new NBTTagCompound();
-				tag.setByte("Slot", (byte)i);
-				this.contents[i].writeToNBT(tag);
+				tag.setByte("InputSlot", (byte)i);
+				this.input[i].writeToNBT(tag);
+				tagList.appendTag(tag);
+			}
+		}
+		
+		for (int i = 0; i < input.length; i ++) {
+			if (this.input[i] != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("InputSlot", (byte)i);
+				this.input[i].writeToNBT(tag);
 				tagList.appendTag(tag);
 			}
 		}
 
-		nbtTag.setTag(ModInfo.BLOCKSORTING_KEY, tagList);
+		nbtTag.setTag(ModInfo.DISTRIBUTOR_KEY, tagList);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
-		System.out.println("Reading SORTING_KEY Block from NBT");
 		super.readFromNBT(tag);
-		NBTTagList tagList = tag.getTagList(ModInfo.BLOCKSORTING_KEY);
-		this.contents = new ItemStack[this.getSizeInventory()];
+		NBTTagList tagList = tag.getTagList(ModInfo.DISTRIBUTOR_KEY);
+		this.input = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound slotTag = (NBTTagCompound) tagList.tagAt(i);
 			int slot = slotTag.getByte("Slot") & 255;
-			if (slot >= 0 && slot < this.contents.length) {
-				this.contents[slot] = ItemStack.loadItemStackFromNBT(slotTag);
+			if (slot >= 0 && slot < this.input.length) {
+				this.input[slot] = ItemStack.loadItemStackFromNBT(slotTag);
 			}
 		}
 	}
 
-	//ISidedInventory Methods
-
 	@Override
 	public int getSizeInventory() {
-		return contents.length;
+		return 36;
+	}
+	
+	public ItemStack getStackInInput(int i) {
+		return getStackInSlot(i);
+	}
+	
+	public ItemStack getStackInOutput(int i) {
+		return getStackInSlot(i + 18);
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return contents[i];
+		if (i >= 0 && i < 18) {
+			return input[i];
+		}
+		else if (i >= 18 && i <= 36) {
+			return output[i - 18];
+		}
+		return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int count) {
 		ItemStack itemstack = getStackInSlot(i);
 		
-		if (contents[i] == null) return itemstack;
+		if (input[i] == null) return itemstack;
 		
 		if (itemstack.stackSize <= count) {
 			setInventorySlotContents(i, null);
@@ -99,22 +120,36 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 		setInventorySlotContents(i, null);
 		return itemstack;
 	}
+	
+	public void setInputSlotContents(int i, ItemStack itemstack) {
+		setInputSlotContents(i, itemstack);
+	}
+	
+	public void setOutputSlotContents(int i, ItemStack itemstack) {
+		setInventorySlotContents(i + 18, itemstack);
+	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		this.contents[i] = itemstack;
-
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-			itemstack.stackSize = getInventoryStackLimit();
+		if (i >= 0 && i < 18) {
+			input[i] = itemstack;
 		}
-
-		onInventoryChanged();
-		
+		else if (i >= 18 && i <= 36) {
+			output[i - 18] = itemstack;
+		}
+		else {
+			if (itemstack == null) {
+				System.err.println("Tried to set invalid slot, " + i + " to null");
+			}
+			else {				
+				System.err.println("Tried to set invalid slot, " + i + " when adding " + itemstack.getDisplayName());
+			}
+		}	
 	}
 
 	@Override
 	public String getInvName() {
-		return "Sorting Block";
+		return "Distributor";
 	}
 
 	@Override
@@ -125,11 +160,6 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
-	}
-
-	@Override
-	public void onInventoryChanged() {
-		// TODO Change items rendered on block
 	}
 
 	@Override
@@ -150,23 +180,16 @@ public class TileEntityBlockSorting extends TileEntity implements ISidedInventor
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		return mainStorage;
+		return null;
 	}
 
 	@Override
-	/**
-     * Returns true if automation can insert the given item in the given slot from the given side. Args: Slot, item,
-     * side
-     */
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		// TODO Add gui first
-		return true;
+		return (i >= 0 && i < 18) ? true : false;
 	}
-
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		// TODO add gui first.
-		return true;
+		return (i >= 18 && i < 36) ? true : false;
 	}
 }

@@ -149,7 +149,7 @@ public class BlockSorting extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		blockIcon = register.registerIcon("easyinventories" + ":" + ModInfo.BLOCKSORTINGTEXTURE);
+		blockIcon = register.registerIcon("easyinventories" + ":" + ModInfo.BLOCKSORTING_TEXTURE);
 	}
 
     
